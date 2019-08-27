@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_widget/src/components/add_new_item.dart';
 import 'package:flutter_state_widget/src/components/dashboard.dart';
 import 'package:flutter_state_widget/src/models/cart.dart';
 import './src/components/product_list.dart';
@@ -28,26 +29,56 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final List<Cart> _carts = [];
 
-  final List<Cart> _carts = [
-    Cart(id: 'DW1', title: 'Sabun Mandi', harga: 15000, qty: 1),
-    Cart(id: 'DW2', title: 'Shampoo', harga: 17000, qty: 2),
-  ];
+  void _openModal(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return SingleChildScrollView(
+            child: AddNewItem(_addNewItem),
+          );
+        });
+  }
+
+  void _addNewItem(String title, double harga, int qty) {
+    final myItem = Cart(
+        id: DateTime.now().toString(), title: title, harga: harga, qty: qty);
+    setState(() {
+      _carts.add(myItem);
+    });
+  }
+
+  void _resetCarts() {
+    setState(() {
+      _carts.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          FlatButton(
+            child: Icon(
+              Icons.clear,
+              color: Colors.white,
+            ),
+            onPressed: () => _resetCarts,
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
-            Dashboard(_carts),
-            ProductList(_carts)
-          ],
+          children: <Widget>[Dashboard(_carts), ProductList(_carts)],
         ),
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => _openModal(context),
+      ),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AddNewItem extends StatefulWidget {
-
   final Function addNew;
   AddNewItem(this.addNew);
 
@@ -10,10 +9,9 @@ class AddNewItem extends StatefulWidget {
 }
 
 class _AddNewItemState extends State<AddNewItem> {
-
   final titleController = TextEditingController();
   final hargaController = TextEditingController();
-  final qtyController   = TextEditingController();
+  final qtyController = TextEditingController();
 
   void saveNewitem() {
     final title = titleController.text;
@@ -21,7 +19,7 @@ class _AddNewItemState extends State<AddNewItem> {
     final qty = int.parse(qtyController.text);
 
     if (title.isEmpty || harga.isEmpty || qty <= 0) {
-      return;      
+      return;
     }
 
     widget.addNew(title, double.parse(harga), qty);
@@ -30,10 +28,31 @@ class _AddNewItemState extends State<AddNewItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        padding: EdgeInsets.all(8.0),
-        
+    return Container(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      margin: EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(labelText: 'Nama Barang'),
+            controller: titleController,
+          ),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'Quantity'),
+            controller: qtyController,
+            keyboardType: TextInputType.number,
+          ),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'Harga'),
+            controller: hargaController,
+            keyboardType: TextInputType.number,
+          ),
+          FlatButton(
+              child: Text('Tambah'),
+              onPressed: saveNewitem,
+              textColor: Colors.blueAccent)
+        ],
       ),
     );
   }
