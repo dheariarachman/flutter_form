@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Icons.clear,
               color: Colors.white,
             ),
-            onPressed: () => _resetCarts,
+            onPressed: () => _resetCarts(),
           )
         ],
       ),
